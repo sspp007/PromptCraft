@@ -1,185 +1,597 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromptCraft - AI Image Prompt Builder</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        body { 
-            font-family: 'Space Grotesk', sans-serif; 
-            background-color: #f3ead3; 
-        }
-        
-        .brutal-shadow {
-            box-shadow: 6px 6px 0px 0px rgba(0,0,0,1);
-            transition: all 0.1s ease;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptCraft // Studio & Style Manager for Generative AI</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom Neo-Brutalist Styling -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
+    
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background-color: #f3ead3;
+    }
 
-        .brutal-shadow-sm {
-            box-shadow: 4px 4px 0px 0px rgba(0,0,0,1);
-            transition: all 0.1s ease;
-        }
-        
-        .brutal-btn:active {
-            transform: translate(4px, 4px);
-            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
-        }
-    </style>
+    /* Strict Neo-Brutalist Classes */
+    .neo-border {
+      border: 4px solid #000000;
+    }
+    
+    .neo-border-2 {
+      border: 2px solid #000000;
+    }
+
+    .neo-shadow {
+      box-shadow: 6px 6px 0px 0px #000000;
+    }
+
+    .neo-shadow-sm {
+      box-shadow: 3px 3px 0px 0px #000000;
+    }
+
+    .neo-shadow-lg {
+      box-shadow: 10px 10px 0px 0px #000000;
+    }
+
+    /* Neo-Brutalist Button mechanical animation */
+    .neo-btn {
+      border: 4px solid #000000;
+      box-shadow: 6px 6px 0px 0px #000000;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      cursor: pointer;
+    }
+
+    .neo-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0px 0px #000000;
+    }
+
+    .neo-btn:active {
+      transform: translate(6px, 6px);
+      box-shadow: 0px 0px 0px 0px #000000;
+    }
+
+    .neo-btn-sm {
+      border: 2px solid #000000;
+      box-shadow: 3px 3px 0px 0px #000000;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      cursor: pointer;
+    }
+
+    .neo-btn-sm:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px 0px #000000;
+    }
+
+    .neo-btn-sm:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0px 0px 0px 0px #000000;
+    }
+
+    /* Neo-Brutalist Input elements */
+    .neo-input {
+      border: 4px solid #000000;
+      background-color: #ffffff;
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
+    }
+
+    .neo-input:focus {
+      outline: none;
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px 0px #000000;
+    }
+
+    /* Custom select styling for Neo-Brutalist arrow */
+    .neo-select-wrapper {
+      position: relative;
+    }
+
+    .neo-select-wrapper::after {
+      content: '▼';
+      font-size: 0.8rem;
+      position: absolute;
+      right: 1.25rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+      font-weight: bold;
+    }
+
+    /* Grid pattern for header banner background */
+    .neo-grid-pattern {
+      background-size: 20px 20px;
+      background-image: 
+        linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+    }
+  </style>
 </head>
-<body class="min-h-screen text-black pb-12">
+<body class="min-h-screen flex flex-col text-black pb-12 antialiased selection:bg-[#ff9c3a] selection:text-black">
 
-    <nav class="border-b-4 border-black bg-white p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-3xl font-black uppercase tracking-tight">PromptCraft</h1>
-            <span class="text-sm font-bold bg-[#ff9c3a] border-2 border-black py-1 px-3 rounded-full brutal-shadow-sm">v1.0</span>
+  <!-- Navbar -->
+  <header class="w-full bg-white border-b-4 border-black sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo Block -->
+      <a href="#" class="flex items-center gap-3 group">
+        <div class="bg-[#ff9c3a] border-4 border-black p-2 neo-shadow-sm group-hover:translate-x-0.5 group-hover:translate-y-0.5 group-hover:shadow-none transition-all">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M11 4a2 2 0 114 0v8a2 2 0 01-2 2H3a2 2 0 01-2-2V4a2 2 0 012-2h8zM18 10a2 2 0 00-2 2v8a2 2 0 002 2h4a2 2 0 002-2v-8a2 2 0 00-2-2h-4z"></path>
+          </svg>
         </div>
-    </nav>
+        <span class="text-2xl sm:text-3xl font-extrabold uppercase tracking-tight select-none">
+          Prompt<span class="bg-[#a3e635] px-1 border-2 border-black neo-shadow-sm ml-1">Craft</span>
+        </span>
+      </a>
 
-    <main class="container mx-auto mt-10 p-4 grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Right Header Actions (Version Tag) -->
+      <div class="flex items-center gap-3">
+        <span class="flex items-center gap-1.5 bg-[#a3e635] text-black font-bold border-2 border-black px-3 py-1 text-xs sm:text-sm uppercase neo-shadow-sm select-none">
+          <span class="w-2.5 h-2.5 rounded-full bg-black animate-pulse"></span>
+          v1.0
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Title / Introduction Section -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full mt-8 mb-4">
+    <div class="w-full bg-[#ff9c3a] neo-border neo-shadow neo-grid-pattern p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="max-w-2xl">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold uppercase mb-2 tracking-tight">Studio & Style Manager</h1>
+        <p class="text-md sm:text-lg font-bold text-black opacity-90 max-w-xl">
+          Craft high-fidelity generative prompts with ease. Combine subjects, camera angles, styling keywords, and geometry rules into clean, optimized output ready for Midjourney, DALL-E, or Stable Diffusion.
+        </p>
+      </div>
+      <div class="flex-shrink-0 flex items-center gap-4 bg-white neo-border neo-shadow-sm p-4 h-fit max-w-xs">
+        <div class="text-4xl font-extrabold text-[#ff9c3a]">⚡</div>
+        <div class="font-bold text-xs uppercase tracking-wider">
+          <div class="text-gray-500">Workspace Status</div>
+          <div class="text-lg text-black font-extrabold">Ready to Compile</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Grid Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-3 gap-8 mt-4">
+    
+    <!-- LEFT SIDE: APP CORE (2/3 Width) -->
+    <div class="lg:col-span-2 flex flex-col gap-8">
+      
+      <!-- CARD A: CONFIG WORKSPACE -->
+      <div class="bg-white neo-border neo-shadow flex flex-col overflow-hidden">
+        <!-- Title Bar -->
+        <div class="bg-[#ff9c3a] border-b-4 border-black p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🛠️</span>
+            <h2 class="text-xl font-extrabold uppercase tracking-wide">Config Workspace</h2>
+          </div>
+          <button id="clear-btn" class="neo-btn-sm bg-white hover:bg-red-200 text-xs font-bold px-3 py-1 uppercase transition-all">
+            Clear All
+          </button>
+        </div>
+
+        <!-- Form Body -->
+        <div class="p-6 flex flex-col gap-6">
+          <!-- Textarea: Subject & Action -->
+          <div class="flex flex-col gap-2">
+            <label for="prompt-subject" class="text-sm font-extrabold uppercase tracking-wider flex justify-between items-center">
+              <span>Subject & Action <span class="text-red-600">*</span></span>
+              <span id="subject-char-count" class="text-xs font-mono font-bold text-gray-500">0 / 500</span>
+            </label>
+            <textarea 
+              id="prompt-subject" 
+              placeholder="e.g., A stylish portrait of a cybernetic detective in a rain-slicked futuristic alleyway, neon signs casting vibrant reflections on puddle surfaces..." 
+              maxlength="500"
+              class="w-full h-32 p-4 neo-input text-base font-semibold resize-none"
+            ></textarea>
+          </div>
+
+          <!-- Style Modifiers (Preset Pills) -->
+          <div class="flex flex-col gap-3">
+            <label class="text-sm font-extrabold uppercase tracking-wider">
+              Style Modifiers <span class="text-gray-500 font-bold text-xs">(Click to toggle)</span>
+            </label>
+            <div class="flex flex-wrap gap-2.5">
+              <button type="button" data-style="Photorealistic" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                📸 Photorealistic
+              </button>
+              <button type="button" data-style="Anime Style" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                🎨 Anime
+              </button>
+              <button type="button" data-style="Cyberpunk Aesthetic" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                ⚡ Cyberpunk
+              </button>
+              <button type="button" data-style="3D Octane Render" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                💿 3D Render
+              </button>
+              <button type="button" data-style="Retro Vaporwave" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                🌴 Vaporwave
+              </button>
+              <button type="button" data-style="Surrealism Fantasy" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                👁️ Surrealism
+              </button>
+              <button type="button" data-style="Detailed Ink Sketch" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                ✏️ Sketch
+              </button>
+              <button type="button" data-style="Studio Ghibli Inspired" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                ☁️ Ghibli
+              </button>
+              <button type="button" data-style="Cinematic Film Still" class="style-pill neo-btn-sm bg-white hover:bg-gray-100 font-bold px-3.5 py-1.5 text-xs uppercase flex items-center gap-1.5">
+                🎬 Cinematic
+              </button>
+            </div>
+          </div>
+
+          <!-- Dropdowns: Camera & Geometry Presets -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Dropdown 1: Camera/Lens -->
+            <div class="flex flex-col gap-2">
+              <label for="camera-preset" class="text-sm font-extrabold uppercase tracking-wider">
+                Camera / Lens Presets
+              </label>
+              <div class="neo-select-wrapper">
+                <select id="camera-preset" class="w-full p-3.5 neo-input font-bold appearance-none bg-white cursor-pointer pr-10">
+                  <option value="Default">Default (No camera tag)</option>
+                  <option value="Sony A1 85mm">Sony A1 85mm</option>
+                  <option value="35mm Vintage Film">35mm Vintage Film</option>
+                  <option value="Canon 24mm Wide-Angle">Canon 24mm Wide-Angle</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Dropdown 2: Geometry -->
+            <div class="flex flex-col gap-2">
+              <label for="geometry-preset" class="text-sm font-extrabold uppercase tracking-wider">
+                Identity & Geometry
+              </label>
+              <div class="neo-select-wrapper">
+                <select id="geometry-preset" class="w-full p-3.5 neo-input font-bold appearance-none bg-white cursor-pointer pr-10">
+                  <option value="Standard">Standard (No geometry rule)</option>
+                  <option value="Strict Geometry Preservation">Strict Geometry Preservation</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Compile Button -->
+          <button id="compile-btn" class="w-full neo-btn bg-[#ff9c3a] text-black text-xl font-extrabold py-4 uppercase tracking-widest flex items-center justify-center gap-3">
+            <span>Compile Prompt</span>
+            <svg class="w-6 h-6 stroke-black" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- CARD B: GENERATED OUTPUT -->
+      <div class="bg-white neo-border neo-shadow flex flex-col overflow-hidden">
+        <!-- Title Bar -->
+        <div class="bg-[#a3e635] border-b-4 border-black p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">📋</span>
+            <h2 class="text-xl font-extrabold uppercase tracking-wide">Generated Output</h2>
+          </div>
+          <!-- Tiny Live Output indicator -->
+          <span class="text-xs font-bold uppercase bg-white px-2 py-0.5 border-2 border-black neo-shadow-sm select-none">Live Output</span>
+        </div>
+
+        <!-- Output Body -->
+        <div class="p-6 flex flex-col gap-5">
+          <!-- Text Box -->
+          <div id="output-box" class="w-full min-h-[140px] bg-[#f3ead3] border-4 border-black p-5 font-mono text-base sm:text-lg font-bold text-black break-words leading-relaxed select-all">Your compiled prompt will appear here after clicking "COMPILE PROMPT"...</div>
+          
+          <!-- Bottom actions -->
+          <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <!-- Counter indicators -->
+            <div class="flex gap-3">
+              <span id="output-word-count" class="text-xs font-mono font-extrabold bg-white border-2 border-black px-2.5 py-1 shadow-[2px_2px_0px_rgba(0,0,0,1)]">Words: 0</span>
+              <span id="output-char-count" class="text-xs font-mono font-extrabold bg-white border-2 border-black px-2.5 py-1 shadow-[2px_2px_0px_rgba(0,0,0,1)]">Chars: 0</span>
+            </div>
+
+            <!-- Copy button aligned to the right -->
+            <button id="copy-btn" class="neo-btn bg-white hover:bg-gray-100 text-black text-base font-extrabold px-6 py-3 uppercase flex items-center gap-2.5 w-full sm:w-auto justify-center">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+              </svg>
+              <span>Copy Output</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDE: META PANELS (1/3 Width) -->
+    <div class="lg:col-span-1 flex flex-col gap-8">
+      
+      <!-- CARD C: DEVELOPER CARD -->
+      <div class="bg-white neo-border neo-shadow flex flex-col overflow-hidden">
+        <!-- Title Bar -->
+        <div class="bg-black text-white p-4 flex items-center gap-2">
+          <span class="text-lg">🕶️</span>
+          <h2 class="text-lg font-extrabold uppercase tracking-wide">The Craftsman</h2>
+        </div>
+
+        <!-- Developer Profile Body -->
+        <div class="p-6 flex flex-col items-center text-center gap-4">
+          <!-- Brutalist Avatar Frame -->
+          <div class="w-24 h-24 bg-[#ff9c3a] border-4 border-black rounded-none neo-shadow flex items-center justify-center overflow-hidden">
+            <!-- Customized Brutalist SVG Avatar -->
+            <svg class="w-20 h-20 text-black" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="25" y="25" width="50" height="50" fill="white" stroke="black" stroke-width="4"/>
+              <!-- Glasses -->
+              <rect x="30" y="40" width="16" height="12" fill="none" stroke="black" stroke-width="4"/>
+              <rect x="54" y="40" width="16" height="12" fill="none" stroke="black" stroke-width="4"/>
+              <line x1="46" y1="46" x2="54" y2="46" stroke="black" stroke-width="4"/>
+              <line x1="26" y1="46" x2="30" y2="46" stroke="black" stroke-width="4"/>
+              <line x1="70" y1="46" x2="74" y2="46" stroke="black" stroke-width="4"/>
+              <!-- Smile -->
+              <path d="M40 64h20" stroke="black" stroke-width="4" stroke-linecap="round"/>
+              <!-- Hair block -->
+              <rect x="25" y="21" width="50" height="8" fill="black"/>
+            </svg>
+          </div>
+
+          <!-- Dev Title info -->
+          <div>
+            <h3 class="text-2xl font-extrabold uppercase tracking-tight">Shahid</h3>
+            <span class="inline-block bg-[#a3e635] text-black font-extrabold text-[11px] uppercase tracking-wide px-2 py-0.5 border-2 border-black mt-1">
+              Full-Stack Web & Systems Developer
+            </span>
+          </div>
+
+          <!-- Bio -->
+          <p class="text-sm font-bold text-gray-700 leading-relaxed text-left border-t-2 border-black pt-4 w-full">
+            Shahid builds high-performance tools, generative AI pipelines, and interactive developer utilities using modern, lightweight frontend frameworks and robust backend architectures.
+          </p>
+
+          <!-- External Link Button -->
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-full neo-btn bg-[#ff9c3a] text-black text-center font-extrabold py-3 uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+            <span>View GitHub Profile</span>
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- CARD D: SYSTEM TOOLS -->
+      <div class="bg-white neo-border neo-shadow flex flex-col overflow-hidden">
+        <!-- Title Bar -->
+        <div class="bg-white border-b-4 border-black p-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-lg">⚙️</span>
+            <h2 class="text-lg font-extrabold uppercase tracking-wide">System Modules</h2>
+          </div>
+        </div>
+
+        <!-- Planned items body -->
+        <div class="p-6 flex flex-col gap-4">
+          <!-- Planned Tool 1 -->
+          <div class="bg-[#f3ead3] neo-border neo-shadow-sm p-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">📊</span>
+              <span class="font-extrabold text-sm uppercase">Global Pulse Dashboard</span>
+            </div>
+            <span class="bg-[#ff9c3a] text-black font-extrabold text-[10px] uppercase border-2 border-black px-2 py-0.5 select-none shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+              Planned
+            </span>
+          </div>
+
+          <!-- Planned Tool 2 -->
+          <div class="bg-[#f3ead3] neo-border neo-shadow-sm p-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">⏳</span>
+              <span class="font-extrabold text-sm uppercase">Chronos Timeline Explorer</span>
+            </div>
+            <span class="bg-[#ff9c3a] text-black font-extrabold text-[10px] uppercase border-2 border-black px-2 py-0.5 select-none shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+              Planned
+            </span>
+          </div>
+
+          <!-- Planned Tool 3 -->
+          <div class="bg-[#f3ead3] neo-border neo-shadow-sm p-4 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">📐</span>
+              <span class="font-extrabold text-sm uppercase">Aspect Ratio Tool</span>
+            </div>
+            <span class="bg-[#ff9c3a] text-black font-extrabold text-[10px] uppercase border-2 border-black px-2 py-0.5 select-none shadow-[2px_2px_0px_rgba(0,0,0,1)]">
+              Planned
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JavaScript Logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // DOM Elements
+      const subjectInput = document.getElementById("prompt-subject");
+      const subjectCharCount = document.getElementById("subject-char-count");
+      const cameraPreset = document.getElementById("camera-preset");
+      const geometryPreset = document.getElementById("geometry-preset");
+      const compileBtn = document.getElementById("compile-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const outputBox = document.getElementById("output-box");
+      const copyBtn = document.getElementById("copy-btn");
+      const wordCountDisplay = document.getElementById("output-word-count");
+      const charCountDisplay = document.getElementById("output-char-count");
+      const stylePills = document.querySelectorAll(".style-pill");
+
+      // Active Modifier Set
+      const activeStyles = new Set();
+
+      // Characters tracker for input textarea
+      subjectInput.addEventListener("input", () => {
+        const count = subjectInput.value.length;
+        subjectCharCount.textContent = `${count} / 500`;
+      });
+
+      // Clear Workspace Logic
+      clearBtn.addEventListener("click", () => {
+        subjectInput.value = "";
+        subjectCharCount.textContent = "0 / 500";
+        cameraPreset.value = "Default";
+        geometryPreset.value = "Standard";
         
-        <div class="lg:col-span-2 space-y-8">
-            <section class="bg-white border-4 border-black rounded-2xl brutal-shadow p-8">
-                <h2 class="text-3xl font-black uppercase mb-6 border-b-4 border-black pb-2">Config Workspace</h2>
-                
-                <div class="mb-6">
-                    <label class="block text-lg font-bold mb-2">Subject & Action</label>
-                    <textarea id="core-subject" rows="3" class="w-full border-4 border-black rounded-xl p-3 focus:outline-none focus:ring-0 text-lg resize-none brutal-shadow-sm" placeholder="e.g., A stylish portrait shot on a cobblestone street..."></textarea>
-                </div>
+        // Reset Style Modifiers
+        activeStyles.clear();
+        stylePills.forEach(pill => {
+          pill.classList.remove("bg-[#a3e635]", "translate-x-[3px]", "translate-y-[3px]", "shadow-none");
+          pill.classList.add("bg-white");
+        });
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-lg font-bold mb-2">Camera/Lens Presets</label>
-                        <select id="camera-setting" class="w-full border-4 border-black rounded-xl p-3 focus:outline-none font-bold brutal-shadow-sm bg-white cursor-pointer">
-                            <option value="">Default Configuration</option>
-                            <option value="shot on Sony A1, 85mm lens, f/1.4">Sony A1, 85mm f/1.4 Portrait</option>
-                            <option value="shot on 35mm film, grainy, vintage look">35mm Vintage Film</option>
-                            <option value="shot on Canon EOS R5, 24mm lens">Canon 24mm Wide-Angle</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-lg font-bold mb-2">Identity & Geometry</label>
-                        <select id="identity-setting" class="w-full border-4 border-black rounded-xl p-3 focus:outline-none font-bold brutal-shadow-sm bg-white cursor-pointer">
-                            <option value="">Standard Mode</option>
-                            <option value="strictly preserving subject identity, accurate facial geometry, no uncanny valley">Strict Geometry Preservation</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <button id="generate-btn" class="mt-8 w-full bg-[#ff9c3a] border-4 border-black text-black font-black text-xl py-4 px-4 rounded-xl brutal-shadow brutal-btn uppercase tracking-wide">
-                    Compile Prompt
-                </button>
-            </section>
+        // Reset Output
+        outputBox.innerText = "Your compiled prompt will appear here after clicking \"COMPILE PROMPT\"...";
+        outputBox.classList.remove("text-red-600", "bg-red-50", "border-red-600");
+        outputBox.classList.add("bg-[#f3ead3]", "border-black");
+        
+        updateCounts("");
+      });
 
-            <section class="bg-white border-4 border-black rounded-2xl brutal-shadow p-8">
-                 <h2 class="text-2xl font-black uppercase mb-4 border-b-4 border-black pb-2">Generated Output String</h2>
-                 
-                 <div id="output-area" class="bg-[#f3ead3] border-4 border-black p-4 rounded-xl min-h-[120px] font-bold text-lg break-words brutal-shadow-sm mb-6">
-                     Your generated prompt will appear here...
-                 </div>
-                 
-                 <div class="flex justify-end">
-                     <button id="copy-btn" class="bg-white border-4 border-black text-black font-bold py-2 px-6 rounded-xl brutal-shadow-sm brutal-btn uppercase">
-                         Copy Output
-                     </button>
-                 </div>
-            </section>
-        </div>
+      // Toggle Style Modifier Pill Logic
+      stylePills.forEach(pill => {
+        pill.addEventListener("click", () => {
+          const styleValue = pill.getAttribute("data-style");
+          
+          if (activeStyles.has(styleValue)) {
+            // Deactivate
+            activeStyles.delete(styleValue);
+            pill.classList.remove("bg-[#a3e635]", "translate-x-[3px]", "translate-y-[3px]", "shadow-none");
+            pill.classList.add("bg-white");
+          } else {
+            // Activate
+            activeStyles.add(styleValue);
+            pill.classList.remove("bg-white");
+            pill.classList.add("bg-[#a3e635]", "translate-x-[3px]", "translate-y-[3px]", "shadow-none");
+          }
+        });
+      });
 
-        <div class="space-y-8">
-            <section class="bg-white border-4 border-black rounded-2xl brutal-shadow p-6">
-                <h3 class="text-2xl font-black uppercase mb-4 border-b-4 border-black pb-2">Developer</h3>
-                <div class="flex items-center space-x-4 mb-4">
-                    <div class="w-16 h-16 bg-[#a3e635] border-4 border-black rounded-xl flex items-center justify-center font-black text-2xl">
-                        DEV
-                    </div>
-                    <div>
-                        <h4 class="text-xl font-black tracking-tight">Shahid</h4>
-                        <p class="text-sm font-bold text-gray-600">Full-Stack Web & Systems Developer</p>
-                    </div>
-                </div>
-                <p class="font-bold text-sm leading-relaxed mb-4">
-                    Building tools using modern web tech, focusing on performant layouts, data engineering, and seamless utility tools.
-                </p>
-                <a href="https://github.com" target="_blank" class="inline-block text-center w-full bg-white border-4 border-black font-black text-sm py-2 px-4 rounded-xl brutal-shadow-sm brutal-btn uppercase">
-                    View GitHub Profile
-                </a>
-            </section>
+      // Compile Prompt Logic
+      compileBtn.addEventListener("click", () => {
+        const subjectText = subjectInput.value.trim();
 
-            <section class="bg-white border-4 border-black rounded-2xl brutal-shadow p-6">
-                <h3 class="text-2xl font-black uppercase mb-4 border-b-4 border-black pb-2">System Tools</h3>
-                <ul class="space-y-3 font-bold">
-                    <li class="p-3 border-2 border-black rounded-xl bg-gray-50 flex justify-between items-center">
-                        <span>Global Pulse Dashboard</span>
-                        <span class="text-xs uppercase bg-gray-200 border border-black px-2 py-0.5 rounded">Planned</span>
-                    </li>
-                    <li class="p-3 border-2 border-black rounded-xl bg-gray-50 flex justify-between items-center">
-                        <span>Chronos Timeline Explorer</span>
-                        <span class="text-xs uppercase bg-gray-200 border border-black px-2 py-0.5 rounded">Planned</span>
-                    </li>
-                    <li class="p-3 border-2 border-black rounded-xl bg-gray-50 flex justify-between items-center">
-                        <span>Aspect Ratio Tool</span>
-                        <span class="text-xs uppercase bg-gray-200 border border-black px-2 py-0.5 rounded">Planned</span>
-                    </li>
-                </ul>
-            </section>
-        </div>
+        // Validation: Textarea is not empty
+        if (!subjectText) {
+          outputBox.innerHTML = `
+            <div class="flex items-start gap-2.5 text-red-600">
+              <span class="text-xl">⚠️</span>
+              <div>
+                <strong class="font-extrabold uppercase block text-sm sm:text-base">Compilation Failed!</strong>
+                <span class="text-xs sm:text-sm font-semibold">Subject & Action cannot be empty. Please fill in the details of your prompt subject.</span>
+              </div>
+            </div>
+          `;
+          // Update colors to alert error
+          outputBox.className = "w-full min-h-[140px] bg-red-50 border-4 border-red-600 p-5 font-mono text-base sm:text-lg font-bold break-words leading-relaxed select-all";
+          updateCounts("");
+          return;
+        }
 
-    </main>
+        // Build array of prompt segments
+        const promptParts = [subjectText];
 
-    <script>
-        const subjectInput = document.getElementById('core-subject');
-        const cameraSelect = document.getElementById('camera-setting');
-        const identitySelect = document.getElementById('identity-setting');
-        const generateBtn = document.getElementById('generate-btn');
-        const outputArea = document.getElementById('output-area');
-        const copyBtn = document.getElementById('copy-btn');
+        // Append active styles
+        if (activeStyles.size > 0) {
+          activeStyles.forEach(style => {
+            promptParts.push(style);
+          });
+        }
 
-        function compilePrompt() {
-            const subject = subjectInput.value.trim();
-            const camera = cameraSelect.value;
-            const identity = identitySelect.value;
+        // Append camera presets (ignore Default)
+        const selectedCamera = cameraPreset.value;
+        if (selectedCamera && selectedCamera !== "Default") {
+          promptParts.push(selectedCamera);
+        }
 
-            if (!subject) {
-                outputArea.textContent = "Please enter a subject or core concept first!";
-                outputArea.classList.add("text-red-600");
-                return;
-            }
+        // Append geometry presets (ignore Standard)
+        const selectedGeometry = geometryPreset.value;
+        if (selectedGeometry && selectedGeometry !== "Standard") {
+          promptParts.push(selectedGeometry);
+        }
+
+        // Append constant quality tags
+        promptParts.push("masterpiece", "highly detailed", "cinematic lighting", "8k resolution");
+
+        // Clean & join with comma and space
+        const finalPrompt = promptParts
+          .map(part => part.trim())
+          .filter(part => part.length > 0)
+          .join(", ");
+
+        // Revert box color styles to normal if they were in error state
+        outputBox.className = "w-full min-h-[140px] bg-[#f3ead3] border-4 border-black p-5 font-mono text-base sm:text-lg font-bold text-black break-words leading-relaxed select-all";
+        
+        // Output text
+        outputBox.innerText = finalPrompt;
+
+        // Update word and char counts
+        updateCounts(finalPrompt);
+      });
+
+      // Helper function to update count stats
+      function updateCounts(text) {
+        if (!text) {
+          wordCountDisplay.textContent = "Words: 0";
+          charCountDisplay.textContent = "Chars: 0";
+          return;
+        }
+        const words = text.split(/\s+/).filter(w => w.length > 0).length;
+        const chars = text.length;
+        wordCountDisplay.textContent = `Words: ${words}`;
+        charCountDisplay.textContent = `Chars: ${chars}`;
+      }
+
+      // Copy Clipboard API Logic
+      copyBtn.addEventListener("click", () => {
+        const textToCopy = outputBox.innerText;
+
+        // Prevent copying placeholders or error messages
+        if (!textToCopy || 
+            textToCopy.startsWith("Your compiled prompt") || 
+            textToCopy.includes("Compilation Failed!")) {
+          // Add temporary shake or hover red styling to output card to flag warning
+          outputBox.classList.add("border-red-600");
+          setTimeout(() => {
+            outputBox.classList.remove("border-red-600");
+          }, 300);
+          return;
+        }
+
+        // Attempt Clipboard copy
+        navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+            // Visual success feedback
+            const originalHTML = copyBtn.innerHTML;
+            copyBtn.innerHTML = `
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+              </svg>
+              <span>Copied!</span>
+            `;
+            // Set lime green color override inline
+            copyBtn.style.backgroundColor = "#a3e635";
             
-            outputArea.classList.remove("text-red-600");
-
-            const promptParts = [
-                subject, camera, identity,
-                "masterpiece", "highly detailed", "cinematic lighting", "8k resolution"
-            ];
-
-            const cleanPromptParts = promptParts.filter(part => part !== "");
-            outputArea.textContent = cleanPromptParts.join(", ");
-        }
-
-        function copyToClipboard() {
-            const textToCopy = outputArea.textContent;
-            const defaultText = "Your generated prompt will appear here...";
-            const errorText = "Please enter a subject or core concept first!";
-
-            if (textToCopy && textToCopy !== defaultText && textToCopy !== errorText) {
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    const originalText = copyBtn.textContent;
-                    copyBtn.textContent = "COPIED!";
-                    copyBtn.classList.replace("bg-white", "bg-[#a3e635]");
-                    
-                    setTimeout(() => {
-                        copyBtn.textContent = "COPY OUTPUT";
-                        copyBtn.classList.replace("bg-[#a3e635]", "bg-white");
-                    }, 2000);
-                }).catch(err => console.error('Failed to copy text: ', err));
-            }
-        }
-
-        generateBtn.addEventListener('click', compilePrompt);
-        copyBtn.addEventListener('click', copyToClipboard);
-    </script>
+            // Revert back after 2 seconds
+            setTimeout(() => {
+              copyBtn.innerHTML = originalHTML;
+              copyBtn.style.backgroundColor = "";
+            }, 2000);
+          })
+          .catch(err => {
+            console.error("Clipboard copy failed: ", err);
+          });
+      });
+    });
+  </script>
 </body>
 </html>
